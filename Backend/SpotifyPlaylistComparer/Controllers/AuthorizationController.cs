@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,13 @@ namespace SpotifyPlaylistComparer.Controllers
     [ApiController]
     public class AuthorizationController : ControllerBase
     {
+        public IConfiguration _config { get; set; }
+
+        public AuthorizationController(IConfiguration config)
+        {
+            _config = config;
+        }
+
 
         [HttpPost("/request")]
         public IActionResult RequestAuthToken()
@@ -23,7 +31,7 @@ namespace SpotifyPlaylistComparer.Controllers
         [HttpGet("/token")]
         public IActionResult GetAuthCode()
         {
-            return Ok();
+            return Ok(_config["Client:Secret"]);
         }
 
         [HttpPost("/refresh")]
