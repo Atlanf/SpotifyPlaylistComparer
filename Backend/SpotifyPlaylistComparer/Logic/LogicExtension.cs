@@ -4,6 +4,7 @@ using SpotifyPlaylistComparer.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace SpotifyPlaylistComparer.Service
@@ -14,6 +15,8 @@ namespace SpotifyPlaylistComparer.Service
         {
             services.AddTransient<IAuthorizationService, AuthorizationService>();
             services.AddTransient<IPlaylistService, PlaylistService>();
+
+            services.AddTransient<HttpClient>();
         }
     }
 }

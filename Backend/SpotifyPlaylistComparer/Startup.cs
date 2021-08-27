@@ -28,10 +28,28 @@ namespace SpotifyPlaylistComparer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLogicServices();
+            // Implement
+            services.AddIpRateLimitService(Configuration);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: Configuration.GetValue<string>("CorsPolicyName"),
+                    builder =>
+                    {
+                        builder.WithOrigins(
+                                Configuration.GetValue<string>("CorsClientAddress"),
+                                Configuration.GetValue<string>("CorsAuthAddress"))
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
 
             services.AddLogging();
             services.AddControllers();
+
+            services.AddLogicServices();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SpotifyPlaylistComparer", Version = "v1" });
@@ -55,7 +73,11 @@ namespace SpotifyPlaylistComparer
 
             app.UseHttpsRedirection();
 
+            app.UseSerilogRequestLogging();
+
             app.UseRouting();
+
+            app.UseCors(Configuration.GetValue<string>("CorsPolicyName"));
 
             app.UseAuthorization();
 
