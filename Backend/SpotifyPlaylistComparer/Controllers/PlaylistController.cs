@@ -11,5 +11,15 @@ namespace SpotifyPlaylistComparer.Controllers
     [ApiController]
     public class PlaylistController : ControllerBase
     {
+        public PlaylistController()
+        {
+
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetUserPlaylists()
+        {
+            return Ok();
+        }
     }
 }

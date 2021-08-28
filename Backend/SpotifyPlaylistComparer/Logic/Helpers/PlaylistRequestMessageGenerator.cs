@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SpotifyPlaylistComparer.Service.Interface
+namespace SpotifyPlaylistComparer.Logic.Helpers
 {
-    public interface IPlaylistService
+    public class PlaylistRequestMessageGenerator
     {
+
     }
 }

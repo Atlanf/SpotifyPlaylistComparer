@@ -1,4 +1,4 @@
-﻿using SpotifyPlaylistComparer.Model;
+﻿using SpotifyPlaylistComparer.Model.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +21,25 @@ namespace SpotifyPlaylistComparer.Logic.Helpers
             }
         }
 
-        public HttpRequestMessage GenerateAuthRequestMessage(AccessTokenRequest request, string clientId, string secret)
+        public HttpRequestMessage GenerateRefreshAccessTokenRequestMessage(RefreshAccessTokenRequest request, string clientId, string secret)
         {
-            var authCreds = GenerateCredentialsString(clientId, secret);
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, _accessTokenEndpoint);
-            var content = GenerateContent(request);
+            var authCreds = GenerateCredentialsString(clientId, secret);
+            var content = GenerateRefreshAccessTokenRequestContent(request);
 
-            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Basic", authCreds);
+            requestMessage.IncludeAccessTokenRequestHeader(authCreds);
+            requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
+
+            return requestMessage;
+        }
+
+        public HttpRequestMessage GenerateAccessTokenRequestMessage(AccessTokenRequest request, string clientId, string secret)
+        {
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, _accessTokenEndpoint);
+            var authCreds = GenerateCredentialsString(clientId, secret);
+            var content = GenerateAccessTokenRequestContent(request);
+
+            requestMessage.IncludeAccessTokenRequestHeader(authCreds);
             requestMessage.Content = new StringContent(content, Encoding.UTF8, "application/x-www-form-urlencoded");
 
             return requestMessage;
@@ -38,9 +50,14 @@ namespace SpotifyPlaylistComparer.Logic.Helpers
             return Convert.ToBase64String(Encoding.Default.GetBytes($"{clientId}:{secret}"));
         }
 
-        private string GenerateContent(AccessTokenRequest request)
+        private string GenerateAccessTokenRequestContent(AccessTokenRequest request)
         {
             return $"grant_type={request.GrantType}&code={request.Code}&redirect_uri={request.RedirectUri}";
+        }
+
+        private string GenerateRefreshAccessTokenRequestContent(RefreshAccessTokenRequest request)
+        {
+            return $"grant_type={request.GrantType}&refresh_token={request.RefreshToken}";
         }
     }
 }

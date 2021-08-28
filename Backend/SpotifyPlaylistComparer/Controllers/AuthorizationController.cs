@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using SpotifyPlaylistComparer.Model;
+using SpotifyPlaylistComparer.Model.Authorization;
 using SpotifyPlaylistComparer.Service;
 using System;
 using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace SpotifyPlaylistComparer.Controllers
             
             if (tokenRequest.Code == null)
             {
-                return Ok();
+                return BadRequest();
             }
 
             var token = await _authService.GetSpotifyAccessTokenAsync(tokenRequest, clientId, secret);
@@ -40,9 +40,19 @@ namespace SpotifyPlaylistComparer.Controllers
         }
 
         [HttpPost("refresh")]
-        public IActionResult RequestRefreshToken()
+        public async Task<IActionResult> RequestRefreshToken([FromBody] RefreshAccessTokenRequest tokenRequest)
         {
-            return Ok();
+            var clientId = _config["Client:Id"];
+            var secret = _config["Client:Secret"];
+
+            if (tokenRequest.RefreshToken == null)
+            {
+                return BadRequest();
+            }
+
+            var token = await _authService.RefreshAccessTokenAsync(tokenRequest, clientId, secret);
+
+            return Ok(token);
         }
 
         [HttpGet("clientId")]

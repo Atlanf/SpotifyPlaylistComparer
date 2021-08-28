@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using SpotifyPlaylistComparer.Logic.Helpers;
+using SpotifyPlaylistComparer.Model.Authorization;
 
 namespace SpotifyPlaylistComparer.Service.Implementation
 {
@@ -31,7 +32,7 @@ namespace SpotifyPlaylistComparer.Service.Implementation
             HttpResponseMessage response = null;
             var requestMessageGenerator = new AuthRequestMessageGenerator();
 
-            using (var requestMessage = requestMessageGenerator.GenerateAuthRequestMessage(request, clientId, secret))
+            using (var requestMessage = requestMessageGenerator.GenerateAccessTokenRequestMessage(request, clientId, secret))
             {
                 response = await _client.SendAsync(requestMessage);
 
@@ -44,6 +45,30 @@ namespace SpotifyPlaylistComparer.Service.Implementation
             }
 
             return null;
+        }
+
+        public async Task<AccessTokenResponse> RefreshAccessTokenAsync(RefreshAccessTokenRequest request, string clientId, string secret)
+        {
+            HttpResponseMessage response = null;
+            var requestMessageGenerator = new AuthRequestMessageGenerator();
+            var accessToken = new AccessTokenResponse();
+
+            using (var requestMessage = requestMessageGenerator.GenerateRefreshAccessTokenRequestMessage(request, clientId, secret))
+            {
+                response = await _client.SendAsync(requestMessage);
+
+                _logger.LogInformation("RefreshAccessTokenAsync response message: {@responseCode}", response.StatusCode);
+            }
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                accessToken = JsonConvert.DeserializeObject<AccessTokenResponse>(await response.Content.ReadAsStringAsync());
+                accessToken.Refresh_Token = request.RefreshToken;
+
+                return accessToken;
+            }
+
+            return accessToken;
         }
     }
 }

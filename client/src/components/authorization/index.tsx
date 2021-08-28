@@ -1,8 +1,5 @@
-import axios from "axios";
-import React, {useState, useEffect} from "react";
-import { useAuth } from "../../hooks/useAuth";
-import { API_SPOTIFY_AUTH_CODE } from "../../shared/apiRoutes";
-import { createAccessTokenRequestString } from "../../shared/requestCreator";
+import React, {useState} from "react";
+import { API_SPOTIFY_AUTH_CODE } from "../../shared/const/apiRoutes";
 import { getAccessCode } from "./utils";
 
 export const Authorization: React.FC = () => {

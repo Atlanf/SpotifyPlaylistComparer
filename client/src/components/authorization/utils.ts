@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_BACKEND, API_SPOTIFY_AUTH_CODE } from "../../shared/apiRoutes";
-import { createAccessTokenRequestString } from "../../shared/requestCreator";
+import { API_BACKEND, API_SPOTIFY_AUTH_CODE } from "../../shared/const/apiRoutes";
+import { createAccessTokenRequestString } from "../../shared/helpers/requestCreator";
 
 const getClientId = async (): Promise<string> => {
     var result = "";

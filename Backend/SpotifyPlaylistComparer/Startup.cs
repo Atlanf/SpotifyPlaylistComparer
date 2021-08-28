@@ -38,8 +38,7 @@ namespace SpotifyPlaylistComparer
                     builder =>
                     {
                         builder.WithOrigins(
-                                Configuration.GetValue<string>("CorsClientAddress"),
-                                Configuration.GetValue<string>("CorsAuthAddress"))
+                                Configuration.GetValue<string>("CorsClientAddress"))
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                     });
