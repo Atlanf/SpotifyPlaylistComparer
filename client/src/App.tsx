@@ -1,22 +1,24 @@
 import React from 'react';
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Authorization } from './components';
-import { Dashboard } from './components/dashboard';
+import { ComparerPage } from './pages/comparerPage';
 import { HomePage } from './pages/homePage';
 
 import { tokenExists } from './shared/helpers/tokenExists';
 
-
-const code = new URLSearchParams(window.location.search).get("code");
 const isAuthenticated: boolean = tokenExists();
 
 function App() {
     return (
         <BrowserRouter>
-            <div>
-                {code ? <Dashboard code={code} /> : <Authorization/> }
-            </div>
+            <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route exact path="/signin" component={Authorization} />
+                <Route exact path="/comparer" render={() => 
+                    isAuthenticated ? <ComparerPage /> : <Redirect to="/signin" />
+                }/>
+            </Switch>
         </BrowserRouter>
     );
 }

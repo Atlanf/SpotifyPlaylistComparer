@@ -13,6 +13,6 @@ namespace SpotifyPlaylistComparer.Model.Authorization
         [Required]
         public string Code { get; set; }
 
-        public string RedirectUri { get; set; } = "http://localhost:3000/";
+        public string RedirectUri { get; set; } = "http://localhost:3000/signin";
     }
 }

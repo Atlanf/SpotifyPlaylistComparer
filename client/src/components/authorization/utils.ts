@@ -1,6 +1,7 @@
-import axios from "axios";
-import { API_BACKEND, API_SPOTIFY_AUTH_CODE } from "../../shared/const/apiRoutes";
+import axios, { AxiosResponse } from "axios";
+import { API_BACKEND, API_BACKEND_AUTH_TOKEN } from "../../shared/const/apiRoutes";
 import { createAccessTokenRequestString } from "../../shared/helpers/requestCreator";
+import { IAccessToken } from "../../shared/interface/authorization.interface";
 
 const getClientId = async (): Promise<string> => {
     var result = "";
@@ -21,9 +22,19 @@ export const getAccessCode = async () => {
     window.location.href = createAccessTokenRequestString(clientId);
 }
 
-export const getAccessToken = async (): Promise<string> => {
-    var result = "";
+export const getAccessToken = async (code: string): Promise<boolean> => {
+    let recieved: boolean = false;
 
+    if (code !== null) {
+        await axios.post(API_BACKEND_AUTH_TOKEN, {code}).then((response:AxiosResponse<IAccessToken>) => {
+            localStorage.setItem("user", JSON.stringify(response.data));
+            recieved = true;
+            return recieved;
+        }).catch(() => {
+            window.location.href = "/signin";
+            recieved = false;
+        })
+    }
 
-    return result;
+    return recieved;
 }
