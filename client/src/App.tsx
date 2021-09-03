@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from "react-dom";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Authorization } from './components';
 import { ComparerPage } from './pages/comparerPage';

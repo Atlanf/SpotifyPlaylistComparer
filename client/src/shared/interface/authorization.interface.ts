@@ -1,7 +1,7 @@
 export interface IAccessToken {
-    access_token: string,
-    token_type: string,
+    access_Token: string,
+    token_Type: string,
     scope: string,
-    expires_in: number,
-    refresh_token: string
+    expires_In: number,
+    refresh_Token: string
 }
