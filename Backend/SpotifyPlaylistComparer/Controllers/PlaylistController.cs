@@ -19,6 +19,7 @@ namespace SpotifyPlaylistComparer.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetUserPlaylists()
         {
+
             return Ok();
         }
     }

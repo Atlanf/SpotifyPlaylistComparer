@@ -1,12 +1,13 @@
 import React from 'react';
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Authorization } from './components';
+import { AuthVerification } from './components/authVerify';
 import { ComparerPage } from './pages/comparerPage';
 import { HomePage } from './pages/homePage';
 
-import { tokenExists } from './shared/helpers/tokenExists';
+import { TokenVerifier } from './shared/helpers/tokenVerifier';
 
-const isAuthenticated: boolean = tokenExists();
+const isAuthenticated: boolean = TokenVerifier.tokenExists();
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     isAuthenticated ? <ComparerPage /> : <Redirect to="/signin" />
                 }/>
             </Switch>
+            <AuthVerification />
         </BrowserRouter>
     );
 }

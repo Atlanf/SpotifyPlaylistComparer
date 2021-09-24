@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { API_BACKEND, API_BACKEND_AUTH_TOKEN } from "../../shared/const/apiRoutes";
+import { setExpireTimeInSeconds } from "../../shared/helpers/dateConverter";
+import { setAccessToken } from "../../shared/helpers/localStorageWorker";
 import { createAccessTokenRequestString } from "../../shared/helpers/requestCreator";
 import { IAccessToken } from "../../shared/interface/authorization.interface";
 
@@ -27,7 +29,9 @@ export const getAccessToken = async (code: string): Promise<boolean> => {
 
     if (code !== null) {
         await axios.post(API_BACKEND_AUTH_TOKEN, {code}).then((response:AxiosResponse<IAccessToken>) => {
-            localStorage.setItem("user", JSON.stringify(response.data));
+            let token: IAccessToken = response.data;
+            token.expires_At = setExpireTimeInSeconds(token.expires_In);
+            setAccessToken(response.data);
             recieved = true;
             return recieved;
         }).catch(() => {

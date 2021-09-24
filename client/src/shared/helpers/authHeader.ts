@@ -1,13 +1,13 @@
 import { IAccessToken } from "../interface";
-import { tokenExists } from "./tokenExists";
+import { getStoredAccessToken } from "./localStorageWorker";
+import { TokenVerifier } from "./tokenVerifier";
 
 export const authHeader = () => {
     var result = {};
+    var token = getStoredAccessToken();
 
-    if (tokenExists()) {
-        var user = JSON.parse(localStorage.getItem("user")!) as IAccessToken;
-        
-        return {Authorization: "Bearer " + user.access_Token};
+    if (token !== null) {
+        return {Authorization: "Bearer " + token.access_Token};
     }
 
     return result;

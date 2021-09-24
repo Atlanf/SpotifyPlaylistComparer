@@ -11,19 +11,17 @@ namespace SpotifyPlaylistComparer.Logic.Helpers
 {
     public class AuthRequestMessageGenerator
     {
-        private readonly string _accessTokenEndpoint = "https://accounts.spotify.com/api/token";
-
         public string AccessTokenEndpoint 
         {
             get
             {
-                return _accessTokenEndpoint;
+                return "https://accounts.spotify.com/api/token";
             }
         }
 
         public HttpRequestMessage GenerateRefreshAccessTokenRequestMessage(RefreshAccessTokenRequest request, string clientId, string secret)
         {
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, _accessTokenEndpoint);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, AccessTokenEndpoint);
             var authCreds = GenerateCredentialsString(clientId, secret);
             var content = GenerateRefreshAccessTokenRequestContent(request);
 
@@ -35,7 +33,7 @@ namespace SpotifyPlaylistComparer.Logic.Helpers
 
         public HttpRequestMessage GenerateAccessTokenRequestMessage(AccessTokenRequest request, string clientId, string secret)
         {
-            var requestMessage = new HttpRequestMessage(HttpMethod.Post, _accessTokenEndpoint);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, AccessTokenEndpoint);
             var authCreds = GenerateCredentialsString(clientId, secret);
             var content = GenerateAccessTokenRequestContent(request);
 

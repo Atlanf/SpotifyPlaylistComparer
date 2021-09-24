@@ -3,5 +3,10 @@ export interface IAccessToken {
     token_Type: string,
     scope: string,
     expires_In: number,
-    refresh_Token: string
+    refresh_Token: string,
+    expires_At: number
+}
+
+export interface IRefreshAccessTokenRequest {
+    refreshToken: string
 }
